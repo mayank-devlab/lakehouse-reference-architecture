@@ -59,6 +59,11 @@ The first slice runs end to end on Databricks using the public Olist dataset.
 - The Gold materialized view currently shows a full recompute on each refresh.
   See ADR-003 for the follow-up.
 
+## How to reuse this repo
+- Copy [`docs/adr/TEMPLATE.md`](docs/adr/TEMPLATE.md) to write your own decision records.
+- See [`docs/design-rules.md`](docs/design-rules.md) for the layer and data quality rules used here.
+- Use the `src/` layout as a starting point for a Bronze/Silver/Gold pipeline.
+
 ## Repo layout
 - `docs/` requirements, architecture notes, ADRs
 - `diagrams/` Mermaid diagram sources
