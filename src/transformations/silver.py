@@ -33,3 +33,29 @@ def silver_order_items():
         F.col("price").cast("double"),
         F.col("freight_value").cast("double"),
     )
+
+@dp.table(
+    name="silver.customers",
+    comment="Cleaned customers; identifiers masked for non-privileged users",
+    schema="""
+        customer_id STRING,
+        customer_unique_id STRING MASK workspace.governance.mask_id,
+        zip_prefix STRING MASK workspace.governance.mask_zip,
+        city STRING,
+        state STRING
+    """,
+)
+@dp.expect_or_drop("customer_id_not_null", "customer_id IS NOT NULL")
+@dp.expect("state_is_two_letters", "length(state) = 2")
+def silver_customers():
+    return (
+        spark.readStream.table("bronze.customers")
+        .select(
+            "customer_id",
+            "customer_unique_id",
+            F.lpad(F.col("customer_zip_code_prefix").cast("string"), 5, "0").alias("zip_prefix"),
+            F.col("customer_city").alias("city"),
+            F.col("customer_state").alias("state"),
+        )
+        .dropDuplicates(["customer_id"])
+    )

@@ -25,3 +25,7 @@ def bronze_orders():
 @dp.table(name="bronze.order_items", comment="Raw order items, append-only")
 def bronze_order_items():
     return _autoloader("order_items")
+
+@dp.table(name="bronze.customers", comment="Raw customers, append-only")
+def bronze_customers():
+    return _autoloader("customers")
